@@ -1,0 +1,53 @@
+{
+    "component_kind": "deepLearning",
+    "component_name": "YOLOv5推理",
+    "input": [
+        {
+            "flag_name": "--model-path", 
+            "type": "string", 
+            "name": "模型文件", 
+            "description": "模型文件的绝对路径",
+            "path": ""
+        },
+        {
+            "flag_name": "--data-path", 
+            "type": "string", 
+            "name": "待检测数据", 
+            "description": "待检测数据的绝对路径", 
+            "path": "" 
+        }
+    ],
+    "log": {
+        "flag_name": "--log-path",
+        "path": "/var/log/logout.log"
+    },
+    "output": [
+    ],
+    "config": [
+        {
+            "flag_name": "--result-minio-path",
+            "front_type": "input",
+            "is_required": true,
+            "front-end-rendering": true,
+            "value": "",
+            "data_type": "string",
+            "name": "预测结果保存位置",
+            "default_value": "",
+            "description": "预测结果保存到 minio 中的位置。"
+        }
+    ],
+    "run": {
+        "command":[
+            "python3"
+        ],
+        "required_args":[
+            "workflow_main.py"
+        ]
+    },
+    "minio_authorization": {
+        "endpoint_flag": "--endpoint",
+        "access_key_flag": "--access-key",
+        "secret_key_flag": "--secret-key",
+        "secure_flag": "--secure"
+    }
+}

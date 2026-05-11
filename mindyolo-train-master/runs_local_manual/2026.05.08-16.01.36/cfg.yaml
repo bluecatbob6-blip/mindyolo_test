@@ -1,0 +1,357 @@
+task: detect
+device_target: CPU
+save_dir: "/Users/miaofangze/code/yolo\u7B97\u5B50\u5F00\u53D1/mindyolo-train-master/runs_local_manual/2026.05.08-16.01.36"
+log_level: INFO
+is_parallel: false
+ms_mode: 1
+max_call_depth: 2000
+ms_amp_level: O0
+keep_loss_fp32: true
+anchor_base: true
+ms_loss_scaler: static
+ms_loss_scaler_value: 1024.0
+ms_jit: false
+ms_enable_graph_kernel: false
+ms_datasink: false
+overflow_still_update: true
+clip_grad: false
+clip_grad_value: 10.0
+ema: true
+weight: ''
+ema_weight: ''
+freeze: []
+epochs: 1
+per_batch_size: 2
+img_size: 640
+nbs: 64
+accumulate: 1
+auto_accumulate: false
+log_interval: 100
+single_cls: false
+sync_bn: false
+keep_checkpoint_max: 100
+run_eval: false
+run_eval_interval: 1
+conf_thres: 0.001
+iou_thres: 0.65
+conf_free: false
+rect: false
+nms_time_limit: 20.0
+recompute: false
+recompute_layers: 0
+seed: 2
+summary: true
+profiler: false
+profiler_step_num: 1
+opencv_threads_num: 2
+strict_load: true
+enable_modelarts: false
+data_url: ''
+ckpt_url: ''
+multi_data_url: ''
+pretrain_url: ''
+train_url: ''
+data_dir: /cache/data/
+ckpt_dir: /cache/pretrain_ckpt/
+data: !!python/object/new:mindyolo.utils.config.Config
+  state:
+    dataset_name: number_fullscreen
+    train_set: "/Users/miaofangze/code/yolo\u7B97\u5B50\u5F00\u53D1/mindyolo-train-master/dataset/number_fullscreen_dataset/train.txt"
+    val_set: "/Users/miaofangze/code/yolo\u7B97\u5B50\u5F00\u53D1/mindyolo-train-master/dataset/number_fullscreen_dataset/val.txt"
+    test_set: "/Users/miaofangze/code/yolo\u7B97\u5B50\u5F00\u53D1/mindyolo-train-master/dataset/number_fullscreen_dataset/test.txt"
+    nc: 10
+    names: &id001
+    - '0'
+    - '1'
+    - '2'
+    - '3'
+    - '4'
+    - '5'
+    - '6'
+    - '7'
+    - '8'
+    - '9'
+    num_parallel_workers: 8
+    train_transforms: &id002
+    - func_name: mosaic
+      prob: 1.0
+    - func_name: resample_segments
+    - func_name: random_perspective
+      prob: 1.0
+      degrees: 0.0
+      translate: 0.1
+      scale: 0.5
+      shear: 0.0
+    - func_name: albumentations
+    - func_name: hsv_augment
+      prob: 1.0
+      hgain: 0.015
+      sgain: 0.7
+      vgain: 0.4
+    - func_name: fliplr
+      prob: 0.5
+    - func_name: label_norm
+      xyxy2xywh_: true
+    - func_name: label_pad
+      padding_size: 160
+      padding_value: -1
+    - func_name: image_norm
+      scale: 255.0
+    - func_name: image_transpose
+      bgr2rgb: true
+      hwc2chw: true
+    test_transforms: &id003
+    - func_name: letterbox
+      scaleup: false
+      only_image: true
+    - func_name: image_norm
+      scale: 255.0
+    - func_name: image_transpose
+      bgr2rgb: true
+      hwc2chw: true
+  dictitems:
+    dataset_name: number_fullscreen
+    train_set: "/Users/miaofangze/code/yolo\u7B97\u5B50\u5F00\u53D1/mindyolo-train-master/dataset/number_fullscreen_dataset/train.txt"
+    val_set: "/Users/miaofangze/code/yolo\u7B97\u5B50\u5F00\u53D1/mindyolo-train-master/dataset/number_fullscreen_dataset/val.txt"
+    test_set: "/Users/miaofangze/code/yolo\u7B97\u5B50\u5F00\u53D1/mindyolo-train-master/dataset/number_fullscreen_dataset/test.txt"
+    nc: 10
+    names: *id001
+    num_parallel_workers: 8
+    train_transforms: *id002
+    test_transforms: *id003
+optimizer: !!python/object/new:mindyolo.utils.config.Config
+  state:
+    optimizer: momentum
+    lr_init: 0.01
+    momentum: 0.937
+    nesterov: true
+    loss_scale: 1.0
+    warmup_epochs: 3
+    warmup_momentum: 0.8
+    warmup_bias_lr: 0.1
+    min_warmup_step: 100
+    group_param: yolov5
+    gp_weight_decay: 0.0005
+    start_factor: 1.0
+    end_factor: 0.01
+    epochs: 1
+    nbs: 64
+    accumulate: 1
+    total_batch_size: 2
+  dictitems:
+    optimizer: momentum
+    lr_init: 0.01
+    momentum: 0.937
+    nesterov: true
+    loss_scale: 1.0
+    warmup_epochs: 3
+    warmup_momentum: 0.8
+    warmup_bias_lr: 0.1
+    min_warmup_step: 100
+    group_param: yolov5
+    gp_weight_decay: 0.0005
+    start_factor: 1.0
+    end_factor: 0.01
+    epochs: 1
+    nbs: 64
+    accumulate: 1
+    total_batch_size: 2
+loss: !!python/object/new:mindyolo.utils.config.Config
+  state:
+    name: YOLOv5Loss
+    box: 0.05
+    cls: 0.5
+    cls_pw: 1.0
+    obj: 1.0
+    obj_pw: 1.0
+    anchor_t: 4.0
+    fl_gamma: 0.0
+    label_smoothing: 0.0
+  dictitems:
+    name: YOLOv5Loss
+    box: 0.05
+    cls: 0.5
+    cls_pw: 1.0
+    obj: 1.0
+    obj_pw: 1.0
+    anchor_t: 4.0
+    fl_gamma: 0.0
+    label_smoothing: 0.0
+network: !!python/object/new:mindyolo.utils.config.Config
+  state:
+    model_name: yolov5
+    depth_multiple: 0.33
+    width_multiple: 0.25
+    stride: &id004
+    - 8
+    - 16
+    - 32
+    anchors: &id005
+    - - 10
+      - 13
+      - 16
+      - 30
+      - 33
+      - 23
+    - - 30
+      - 61
+      - 62
+      - 45
+      - 59
+      - 119
+    - - 116
+      - 90
+      - 156
+      - 198
+      - 373
+      - 326
+    backbone: &id006
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 64
+        - 6
+        - 2
+        - 2
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 128
+        - 3
+        - 2
+    - - -1
+      - 3
+      - C3
+      - - 128
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 256
+        - 3
+        - 2
+    - - -1
+      - 6
+      - C3
+      - - 256
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 512
+        - 3
+        - 2
+    - - -1
+      - 9
+      - C3
+      - - 512
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 1024
+        - 3
+        - 2
+    - - -1
+      - 3
+      - C3
+      - - 1024
+    - - -1
+      - 1
+      - SPPF
+      - - 1024
+        - 5
+    head: &id007
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 512
+        - 1
+        - 1
+    - - -1
+      - 1
+      - Upsample
+      - - None
+        - 2
+        - nearest
+    - - - -1
+        - 6
+      - 1
+      - Concat
+      - - 1
+    - - -1
+      - 3
+      - C3
+      - - 512
+        - false
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 256
+        - 1
+        - 1
+    - - -1
+      - 1
+      - Upsample
+      - - None
+        - 2
+        - nearest
+    - - - -1
+        - 4
+      - 1
+      - Concat
+      - - 1
+    - - -1
+      - 3
+      - C3
+      - - 256
+        - false
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 256
+        - 3
+        - 2
+    - - - -1
+        - 14
+      - 1
+      - Concat
+      - - 1
+    - - -1
+      - 3
+      - C3
+      - - 512
+        - false
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 512
+        - 3
+        - 2
+    - - - -1
+        - 10
+      - 1
+      - Concat
+      - - 1
+    - - -1
+      - 3
+      - C3
+      - - 1024
+        - false
+    - - - 17
+        - 20
+        - 23
+      - 1
+      - YOLOv5Head
+      - - nc
+        - anchors
+        - stride
+  dictitems:
+    model_name: yolov5
+    depth_multiple: 0.33
+    width_multiple: 0.25
+    stride: *id004
+    anchors: *id005
+    backbone: *id006
+    head: *id007
+config: "/Users/miaofangze/code/yolo\u7B97\u5B50\u5F00\u53D1/mindyolo-train-master/mindyolo_core/configs/yolov5/yolov5n_number.yaml"
+rank: 0
+rank_size: 1
+total_batch_size: 2

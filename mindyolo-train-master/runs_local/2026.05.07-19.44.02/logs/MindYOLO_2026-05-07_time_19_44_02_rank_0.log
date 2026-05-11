@@ -1,0 +1,8 @@
+2026-05-07 19:44:02,621 [INFO] 
+2026-05-07 19:44:02,621 [INFO] Please check the above information for the configurations
+2026-05-07 19:44:02,688 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-07 19:44:02,698 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-07 19:44:02,732 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-07 19:44:02,857 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-07 19:44:02,866 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-07 19:44:02,901 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M

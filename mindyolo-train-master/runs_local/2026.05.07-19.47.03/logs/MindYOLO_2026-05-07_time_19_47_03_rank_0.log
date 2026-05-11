@@ -1,0 +1,51 @@
+2026-05-07 19:47:03,365 [INFO] 
+2026-05-07 19:47:03,366 [INFO] Please check the above information for the configurations
+2026-05-07 19:47:03,432 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-07 19:47:03,441 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-07 19:47:03,475 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-07 19:47:03,602 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-07 19:47:03,611 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-07 19:47:03,646 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-07 19:47:03,717 [WARNING] Cannot find checkpoint parameter `model.model.24.stride`.
+2026-05-07 19:47:03,717 [WARNING] Dropping checkpoint parameter `model.model.24.m.0.weight` with shape `(255, 64, 1, 1)`, which is inconsistent with cell shape `(45, 64, 1, 1)`
+2026-05-07 19:47:03,717 [WARNING] Dropping checkpoint parameter `model.model.24.m.0.bias` with shape `(255,)`, which is inconsistent with cell shape `(45,)`
+2026-05-07 19:47:03,717 [WARNING] Dropping checkpoint parameter `model.model.24.m.1.weight` with shape `(255, 128, 1, 1)`, which is inconsistent with cell shape `(45, 128, 1, 1)`
+2026-05-07 19:47:03,717 [WARNING] Dropping checkpoint parameter `model.model.24.m.1.bias` with shape `(255,)`, which is inconsistent with cell shape `(45,)`
+2026-05-07 19:47:03,717 [WARNING] Dropping checkpoint parameter `model.model.24.m.2.weight` with shape `(255, 256, 1, 1)`, which is inconsistent with cell shape `(45, 256, 1, 1)`
+2026-05-07 19:47:03,717 [WARNING] Dropping checkpoint parameter `model.model.24.m.2.bias` with shape `(255,)`, which is inconsistent with cell shape `(45,)`
+2026-05-07 19:47:03,721 [INFO] Pretrain model load from "/Users/miaofangze/code/yolo算子开发/mindyolo-train-master/weights/yolov5n_300e_mAP273-9b16bd7b.ckpt" success.
+2026-05-07 19:47:04,061 [INFO] ema_weight not exist, default pretrain weight is currently used.
+2026-05-07 19:47:04,076 [INFO] Dataset Cache file hash/version check success.
+2026-05-07 19:47:04,076 [INFO] Load dataset cache from [/Users/miaofangze/code/yolo算子开发/mindyolo-train-master/dataset/number_fullscreen_dataset/train.cache.npy] success.
+2026-05-07 19:47:04,088 [INFO] Dataloader num parallel workers: [8]
+2026-05-07 19:47:04,097 [INFO] total batch size: 1, accumulate: 1, nbs: 64, weight_decay scaled to 7.8125e-06
+2026-05-07 19:47:04,127 [INFO] 
+2026-05-07 19:47:04,129 [INFO] got 1 active callback as follows:
+2026-05-07 19:47:04,129 [INFO] SummaryCallback()
+2026-05-07 19:47:04,129 [WARNING] The first epoch will be compiled for the graph, which may take a long time; You can come back later :).
+2026-05-07 19:47:37,642 [INFO] Epoch 1/1, Step 100/1178, imgsize (320, 320), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.09745331108570099
+2026-05-07 19:47:37,645 [INFO] Epoch 1/1, Step 100/1178, step time: 335.16 ms
+2026-05-07 19:48:03,930 [INFO] Epoch 1/1, Step 200/1178, imgsize (320, 320), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.09490662068128586
+2026-05-07 19:48:03,933 [INFO] Epoch 1/1, Step 200/1178, step time: 262.87 ms
+2026-05-07 19:48:30,576 [INFO] Epoch 1/1, Step 300/1178, imgsize (320, 320), loss: nan, lbox: -inf, lobj: nan, lcls: nan, cur_lr: 0.09235993027687073
+2026-05-07 19:48:30,579 [INFO] Epoch 1/1, Step 300/1178, step time: 266.46 ms
+2026-05-07 19:48:57,751 [INFO] Epoch 1/1, Step 400/1178, imgsize (320, 320), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.0898132398724556
+2026-05-07 19:48:57,754 [INFO] Epoch 1/1, Step 400/1178, step time: 271.75 ms
+2026-05-07 19:49:25,230 [INFO] Epoch 1/1, Step 500/1178, imgsize (320, 320), loss: nan, lbox: -inf, lobj: nan, lcls: nan, cur_lr: 0.08726655691862106
+2026-05-07 19:49:25,233 [INFO] Epoch 1/1, Step 500/1178, step time: 274.79 ms
+2026-05-07 19:49:53,029 [INFO] Epoch 1/1, Step 600/1178, imgsize (320, 320), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.08471986651420593
+2026-05-07 19:49:53,032 [INFO] Epoch 1/1, Step 600/1178, step time: 277.99 ms
+2026-05-07 19:50:21,192 [INFO] Epoch 1/1, Step 700/1178, imgsize (320, 320), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.0821731761097908
+2026-05-07 19:50:21,195 [INFO] Epoch 1/1, Step 700/1178, step time: 281.64 ms
+2026-05-07 19:50:49,585 [INFO] Epoch 1/1, Step 800/1178, imgsize (320, 320), loss: nan, lbox: -inf, lobj: nan, lcls: nan, cur_lr: 0.07962648570537567
+2026-05-07 19:50:49,587 [INFO] Epoch 1/1, Step 800/1178, step time: 283.92 ms
+2026-05-07 19:51:18,156 [INFO] Epoch 1/1, Step 900/1178, imgsize (320, 320), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.07707979530096054
+2026-05-07 19:51:18,159 [INFO] Epoch 1/1, Step 900/1178, step time: 285.72 ms
+2026-05-07 19:51:46,891 [INFO] Epoch 1/1, Step 1000/1178, imgsize (320, 320), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.07453310489654541
+2026-05-07 19:51:46,894 [INFO] Epoch 1/1, Step 1000/1178, step time: 287.35 ms
+2026-05-07 19:52:15,393 [INFO] Epoch 1/1, Step 1100/1178, imgsize (320, 320), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.07198641449213028
+2026-05-07 19:52:15,394 [INFO] Epoch 1/1, Step 1100/1178, step time: 284.99 ms
+2026-05-07 19:52:37,911 [INFO] Saving model to /Users/miaofangze/code/yolo算子开发/mindyolo-train-master/runs_local/2026.05.07-19.47.03/weights/yolov5n_number-1_1178.ckpt
+2026-05-07 19:52:37,911 [INFO] Epoch 1/1, epoch time: 5.56 min.
+2026-05-07 19:52:37,920 [INFO] End Train.
+2026-05-07 19:52:37,989 [INFO] Training completed.

@@ -1,0 +1,17 @@
+2026-05-07 19:24:19,048 [INFO] 
+2026-05-07 19:24:19,048 [INFO] Please check the above information for the configurations
+2026-05-07 19:24:19,113 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-07 19:24:19,123 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-07 19:24:19,158 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-07 19:24:19,283 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-07 19:24:19,292 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-07 19:24:19,327 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-07 19:24:19,685 [INFO] ema_weight not exist, default pretrain weight is currently used.
+2026-05-07 19:24:19,700 [INFO] Dataset Cache file hash/version check success.
+2026-05-07 19:24:19,700 [INFO] Load dataset cache from [/Users/miaofangze/code/yolo算子开发/mindyolo-train-master/dataset/number_fullscreen_dataset/train.cache.npy] success.
+2026-05-07 19:24:19,712 [INFO] Dataloader num parallel workers: [8]
+2026-05-07 19:24:19,720 [INFO] total batch size: 1, accumulate: 1, nbs: 64, weight_decay scaled to 7.8125e-06
+2026-05-07 19:24:19,751 [INFO] 
+2026-05-07 19:24:19,753 [INFO] got 1 active callback as follows:
+2026-05-07 19:24:19,753 [INFO] SummaryCallback()
+2026-05-07 19:24:19,753 [WARNING] The first epoch will be compiled for the graph, which may take a long time; You can come back later :).

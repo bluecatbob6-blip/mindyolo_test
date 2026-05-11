@@ -1,0 +1,40 @@
+{
+    "log": {
+        "path": "/yolov5_inference/log/logout.log"
+    },
+    "http_server": {
+        "target_port": "8000",
+        "router": "api/v1/inference",
+        "request": {
+            "method": "POST",
+            "content-type": "multipart/form-data",
+            "data": [
+                {
+                    "name": "upload_files",
+                    "value-type": "图片文件"
+                }
+            ]
+        },
+        "response": {
+            "content-type": "image/jpeg",
+            "data": "图片"
+        },
+        "detect_type": "image",
+        "run": {
+            "command": ["python3"],
+            "required_args": ["http_main.py"]
+        }
+    },
+    "batch_server": {
+        "run": {
+            "command": ["python3"],
+            "required_args": ["batch_main.py"]
+        }
+    },
+    "minio_authorization": {
+        "endpoint_flag": "--endpoint",
+        "access_key_flag": "--access-key",
+        "secret_key_flag": "--secret-key",
+        "secure_flag": "--secure"
+    }
+}
