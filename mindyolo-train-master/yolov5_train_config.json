@@ -45,11 +45,11 @@
         },
         {
             "flag_name": "--cfg",
-            "front_type": "file",
+            "front_type": "configFile",
             "front-end-rendering": true,
             "is_required": true,
             "value": "",
-            "data_type": "file",
+            "data_type": "string",
             "name": "YOLOv5模型配置",
             "default_value": "/root/yolov5_train/models/",
             "description": "上传本地训练模型配置文件，可以是yolov5s.yaml、yolov5m.yaml、yolov5n.yaml、yolov5l.yaml和yolov5x.yaml。",
@@ -101,7 +101,7 @@
             "name": "训练优化器",
             "default_value": "SGD",
             "description": "设置YOLOv5训练的优化器，默认为SGD。",
-            "type_of_list": "none"
+            "type_of_list": "single"
         },
         {
             "flag_name": "--workers",
@@ -140,6 +140,12 @@
             "type_of_list": "none"
         }
     ],
+    "minio_authorization": {
+        "endpoint_flag": "--endpoint",
+        "access_key_flag": "--access-key",
+        "secret_key_flag": "--secret-key",
+        "secure_flag": "--secure"
+    },
     "run": {
         "command": [
             "python3"

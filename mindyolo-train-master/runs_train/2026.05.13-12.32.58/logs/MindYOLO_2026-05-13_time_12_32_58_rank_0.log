@@ -1,0 +1,43 @@
+2026-05-13 12:32:58,244 [INFO] 
+2026-05-13 12:32:58,245 [INFO] Please check the above information for the configurations
+2026-05-13 12:32:58,311 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 12:32:58,321 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 12:32:58,357 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-13 12:32:58,506 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 12:32:58,516 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 12:32:58,550 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-13 12:32:58,944 [INFO] ema_weight not exist, default pretrain weight is currently used.
+2026-05-13 12:32:58,979 [INFO] Dataset Cache file hash/version check success.
+2026-05-13 12:32:58,979 [INFO] Load dataset cache from [../dataset/number_fullscreen_dataset/train.cache.npy] success.
+2026-05-13 12:32:58,997 [INFO] Dataloader num parallel workers: [1]
+2026-05-13 12:32:59,010 [INFO] total batch size: 2, accumulate: 1, nbs: 64, weight_decay scaled to 1.5625e-05
+2026-05-13 12:32:59,040 [INFO] 
+2026-05-13 12:32:59,043 [INFO] got 1 active callback as follows:
+2026-05-13 12:32:59,043 [INFO] SummaryCallback()
+2026-05-13 12:32:59,043 [WARNING] The first epoch will be compiled for the graph, which may take a long time; You can come back later :).
+2026-05-13 12:34:00,948 [INFO] Epoch 1/2, Step 100/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.09490662068128586
+2026-05-13 12:34:00,951 [INFO] Epoch 1/2, Step 100/589, step time: 619.08 ms
+2026-05-13 12:34:56,739 [INFO] Epoch 1/2, Step 200/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.0898132398724556
+2026-05-13 12:34:56,742 [INFO] Epoch 1/2, Step 200/589, step time: 557.91 ms
+2026-05-13 12:35:54,394 [INFO] Epoch 1/2, Step 300/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.08471986651420593
+2026-05-13 12:35:54,395 [INFO] Epoch 1/2, Step 300/589, step time: 576.53 ms
+2026-05-13 12:36:55,507 [INFO] Epoch 1/2, Step 400/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.07962648570537567
+2026-05-13 12:36:55,510 [INFO] Epoch 1/2, Step 400/589, step time: 611.15 ms
+2026-05-13 12:38:00,560 [INFO] Epoch 1/2, Step 500/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.07453310489654541
+2026-05-13 12:38:00,563 [INFO] Epoch 1/2, Step 500/589, step time: 650.52 ms
+2026-05-13 12:39:03,085 [INFO] Saving model to /Users/miaofangze/code/yolo算子开发/mindyolo-train-master/runs_train/2026.05.13-12.32.58/weights/yolov5n_number_split-1_589.ckpt
+2026-05-13 12:39:03,085 [INFO] Epoch 1/2, epoch time: 6.07 min.
+2026-05-13 12:40:13,010 [INFO] Epoch 2/2, Step 100/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.06297648698091507
+2026-05-13 12:40:13,013 [INFO] Epoch 2/2, Step 100/589, step time: 699.28 ms
+2026-05-13 12:41:23,380 [INFO] Epoch 2/2, Step 200/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.05760297179222107
+2026-05-13 12:41:23,383 [INFO] Epoch 2/2, Step 200/589, step time: 703.69 ms
+2026-05-13 12:42:34,247 [INFO] Epoch 2/2, Step 300/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.05222945660352707
+2026-05-13 12:42:34,250 [INFO] Epoch 2/2, Step 300/589, step time: 708.67 ms
+2026-05-13 12:43:45,538 [INFO] Epoch 2/2, Step 400/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.04685594141483307
+2026-05-13 12:43:45,541 [INFO] Epoch 2/2, Step 400/589, step time: 712.91 ms
+2026-05-13 12:44:57,689 [INFO] Epoch 2/2, Step 500/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.04148242622613907
+2026-05-13 12:44:57,689 [INFO] Epoch 2/2, Step 500/589, step time: 721.48 ms
+2026-05-13 12:46:00,927 [INFO] Saving model to /Users/miaofangze/code/yolo算子开发/mindyolo-train-master/runs_train/2026.05.13-12.32.58/weights/yolov5n_number_split-2_589.ckpt
+2026-05-13 12:46:00,927 [INFO] Epoch 2/2, epoch time: 6.96 min.
+2026-05-13 12:46:00,944 [INFO] End Train.
+2026-05-13 12:46:00,946 [INFO] Training completed.

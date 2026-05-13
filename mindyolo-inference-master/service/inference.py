@@ -4,7 +4,7 @@ import subprocess
 import sys
 import tempfile
 import urllib.request
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import List, Optional
 
@@ -48,10 +48,28 @@ class InferenceOptions:
     extra_args: Optional[List[str]] = None
 
 
-class MindYOLOInference:
-    def __init__(self, options: InferenceOptions):
-        self.options = options
-        self.mindyolo_root = os.path.abspath(options.mindyolo_root)
+class inference:
+    """平台《算子开发规范》推理类：`model_path`、`load_model`、`run(source)`；子进程调用内嵌或自定义 `mindyolo_root` 下的 `demo/predict.py` / `deploy/mslite_predict.py`。"""
+
+    def __init__(self, model_path: str, options: InferenceOptions):
+        self.model_path = os.path.abspath(model_path)
+        self._base_options = replace(
+            options,
+            model_path=self.model_path,
+            image_path="",
+        )
+        self.mindyolo_root = os.path.abspath(self._base_options.mindyolo_root)
+        self.model = self.load_model()
+
+    def load_model(self) -> str:
+        """校验模型路径存在；权重由子进程加载，`self.model` 为规范化路径字符串。"""
+        if not os.path.isfile(self.model_path):
+            raise FileNotFoundError(f"未找到模型文件: {self.model_path}")
+        return self.model_path
+
+    def run(self, source: str) -> List[str]:
+        self.options = replace(self._base_options, image_path=source)
+        return self._execute()
 
     def _resolve_config(self) -> str:
         if self.options.config:
@@ -252,7 +270,7 @@ class MindYOLOInference:
             raise ValueError(f"视频/流没有读取到帧: {source}")
         return [output_path]
 
-    def run(self) -> List[str]:
+    def _execute(self) -> List[str]:
         source = self.options.image_path
         if not os.path.isfile(self.options.model_path):
             raise FileNotFoundError(f"未找到模型文件: {self.options.model_path}")

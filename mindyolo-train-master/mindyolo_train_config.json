@@ -45,11 +45,11 @@
         },
         {
             "flag_name": "--cfg",
-            "front_type": "file",
+            "front_type": "configFile",
             "front-end-rendering": true,
             "is_required": true,
             "value": "",
-            "data_type": "file",
+            "data_type": "string",
             "name": "模型配置文件",
             "default_value": "/root/mindyolo_train/configs/",
             "description": "上传或指定 MindYOLO 训练用 yaml（与 YOLOv5 平台字段 --cfg 对齐；可为 configs/yolov5/yolov5s.yaml 等）。",
@@ -101,7 +101,7 @@
             "name": "训练优化器",
             "default_value": "SGD",
             "description": "优化器名称；实际优化器以 MindYOLO yaml 内配置为准，可选透传到子进程。",
-            "type_of_list": "none"
+            "type_of_list": "single"
         },
         {
             "flag_name": "--workers",
@@ -140,6 +140,12 @@
             "type_of_list": "none"
         }
     ],
+    "minio_authorization": {
+        "endpoint_flag": "--endpoint",
+        "access_key_flag": "--access-key",
+        "secret_key_flag": "--secret-key",
+        "secure_flag": "--secure"
+    },
     "run": {
         "command": [
             "python3"

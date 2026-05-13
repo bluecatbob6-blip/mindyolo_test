@@ -10,7 +10,7 @@ from mindyolo.models import create_loss, create_model
 from mindyolo.optim import (EMA, create_group_param, create_lr_scheduler,
                             create_optimizer, create_warmup_momentum_scheduler)
 from mindyolo.utils import logger
-from mindyolo.utils.config import parse_args
+from mindyolo.utils.config import merge_dataset_yaml_into_args, parse_args
 from mindyolo.utils.train_step_factory import get_gradreducer, get_loss_scaler, create_train_step_fn
 from mindyolo.utils.trainer_factory import create_trainer
 from mindyolo.utils.callback import create_callback
@@ -73,6 +73,40 @@ def get_parser_train(parents=None):
     parser.add_argument("--profiler", type=ast.literal_eval, default=False, help="collect profiling data or not")
     parser.add_argument("--profiler_step_num", type=int, default=1, help="collect profiler data for how many steps.")
     parser.add_argument("--opencv_threads_num", type=int, default=2, help="set the number of threads for opencv")
+    parser.add_argument(
+        "--dataset-yaml",
+        "--dataset_yaml",
+        dest="dataset_yaml_path",
+        type=str,
+        default="",
+        help="独立数据 yaml（等同 YOLOv5 的 --data）；与 --config 合并进 args.data，也可用环境变量 PLATFORM_DATA_YAML",
+    )
+    parser.add_argument(
+        "--platform-optimizer",
+        "--platform_optimizer",
+        dest="platform_optimizer",
+        type=str,
+        default="",
+        help="覆盖 yaml 中 optimizer.optimizer（如 SGD/Adam/AdamW，与平台 JSON 对齐）",
+    )
+    parser.add_argument(
+        "--save_epoch_interval",
+        type=int,
+        default=1,
+        help="每 N 个 epoch 保存一次权重；1 表示每个 epoch 都存（对齐平台 save-period）",
+    )
+    parser.add_argument(
+        "--early_stop_patience",
+        type=int,
+        default=0,
+        help="验证集 map50 连续若干 epoch 无提升则提前结束；0 关闭；需 --run_eval True",
+    )
+    parser.add_argument(
+        "--num_parallel_workers",
+        type=int,
+        default=None,
+        help="override yaml data.num_parallel_workers (MindSpore dataset loader parallelism)",
+    )
     parser.add_argument("--strict_load", type=ast.literal_eval, default=True, help="strictly load the pretrain model")
 
     # args for ModelArts
@@ -94,6 +128,21 @@ def train(args):
     set_seed(args.seed)
     set_default(args)
     main_device = args.rank % args.rank_size == 0
+
+    po = (getattr(args, "platform_optimizer", None) or "").strip()
+    if po:
+        key = po.lower()
+        alias = {
+            "sgd": "sgd",
+            "adam": "adam",
+            "adamw": "adamw",
+            "momentum": "momentum",
+            "nesterov": "nesterov",
+        }
+        if key in alias:
+            args.optimizer["optimizer"] = alias[key]
+        else:
+            logger.warning("Unknown --platform-optimizer %r, ignored (use yaml optimizer).", po)
 
     logger.info(f"parse_args:\n{args}")
     logger.info("Please check the above information for the configurations")
@@ -305,6 +354,8 @@ def train(args):
         profiler=args.profiler
     )
     if not args.ms_datasink:
+        if int(getattr(args, "early_stop_patience", 0) or 0) > 0 and not args.run_eval:
+            logger.warning("--early_stop_patience 已设置但 run_eval 为 False，早停不会生效；请开启 --run_eval True。")
         trainer.train(
             epochs=args.epochs,
             main_device=main_device,
@@ -323,9 +374,13 @@ def train(args):
             test_fn=test_fn,
             rank_size=args.rank_size,
             ms_jit=args.ms_jit,
-            profiler_step_num=args.profiler_step_num
+            profiler_step_num=args.profiler_step_num,
+            save_epoch_interval=max(1, int(getattr(args, "save_epoch_interval", 1) or 1)),
+            early_stop_patience=max(0, int(getattr(args, "early_stop_patience", 0) or 0)),
         )
     else:
+        if int(getattr(args, "early_stop_patience", 0) or 0) > 0 and not args.run_eval:
+            logger.warning("--early_stop_patience 已设置但 run_eval 为 False，早停不会生效；请开启 --run_eval True。")
         logger.warning("DataSink is an experimental interface under development.")
         logger.warning("Train with data sink mode.")
         assert args.accumulate == 1, "datasink mode not support grad accumulate."
@@ -344,7 +399,9 @@ def train(args):
             run_eval=args.run_eval,
             run_eval_interval=args.run_eval_interval,
             test_fn=test_fn,
-            profiler_step_num=args.profiler_step_num
+            profiler_step_num=args.profiler_step_num,
+            save_epoch_interval=max(1, int(getattr(args, "save_epoch_interval", 1) or 1)),
+            early_stop_patience=max(0, int(getattr(args, "early_stop_patience", 0) or 0)),
         )
     logger.info("Training completed.")
 
@@ -352,4 +409,9 @@ def train(args):
 if __name__ == "__main__":
     parser = get_parser_train()
     args = parse_args(parser)
+    ds_path = (getattr(args, "dataset_yaml_path", None) or "").strip() or (os.environ.get("PLATFORM_DATA_YAML") or "").strip()
+    if ds_path:
+        merge_dataset_yaml_into_args(args, ds_path)
+    if args.num_parallel_workers is not None:
+        args.data["num_parallel_workers"] = args.num_parallel_workers
     train(args)

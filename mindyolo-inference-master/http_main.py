@@ -9,6 +9,7 @@ from myutils.mylog import init_log
 from myutils import myminio
 from myutils import strconv
 from http_api.router import inference
+from service import BUNDLED_MINDYOLO_ROOT
 
 # fastapi定义路由
 app = FastAPI()
@@ -23,7 +24,7 @@ def flag_parse(first: bool):
     parser.add_argument("--model-scale", dest="model_scale", default="s")
     parser.add_argument("--backend", dest="backend", default="ckpt", choices=["ckpt", "mindir"])
     parser.add_argument("--config", dest="config_path", default="")
-    parser.add_argument("--mindyolo-root", dest="mindyolo_root", default="../mindyolo-master")
+    parser.add_argument("--mindyolo-root", dest="mindyolo_root", default=BUNDLED_MINDYOLO_ROOT)
     parser.add_argument("--device-target", dest="device_target", default="Ascend")
     parser.add_argument("--img-size", dest="img_size", type=int, default=640)
     parser.add_argument("--conf-thres", dest="conf_thres", type=float, default=0.25)
@@ -51,7 +52,7 @@ def init():
     config.init_global_config(endpoint=args.endpoint, access_key=args.access_key, secret_key=args.secret_key, secure=secure)
     
     log_path = "/var/log/logout.log"
-    # init log
+    # init log（无写权限时 mylog 会落到 ./runs_batch/logout.log，避免 macOS 本地 PermissionError）
     init_log(log_path)
     config.global_config.log_path = log_path
     config.global_config.model_type = args.model_type

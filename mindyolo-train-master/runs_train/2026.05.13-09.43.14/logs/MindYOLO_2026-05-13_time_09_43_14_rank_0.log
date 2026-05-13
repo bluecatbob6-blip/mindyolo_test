@@ -1,0 +1,23 @@
+2026-05-13 09:43:14,947 [INFO] 
+2026-05-13 09:43:14,947 [INFO] Please check the above information for the configurations
+2026-05-13 09:43:15,013 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 09:43:15,023 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 09:43:15,057 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-13 09:43:15,179 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 09:43:15,188 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 09:43:15,222 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-13 09:43:15,596 [INFO] ema_weight not exist, default pretrain weight is currently used.
+2026-05-13 09:43:15,636 [INFO] Dataset cache file hash/version check fail.
+2026-05-13 09:43:15,636 [INFO] Datset caching now...
+2026-05-13 09:43:15,949 [INFO] New cache created: ../dataset/number_fullscreen_dataset/train.cache.npy
+2026-05-13 09:43:15,950 [INFO] Dataset caching success.
+2026-05-13 09:43:15,954 [INFO] Dataloader num parallel workers: [8]
+2026-05-13 09:43:15,964 [INFO] total batch size: 8, accumulate: 1, nbs: 64, weight_decay scaled to 6.25e-05
+2026-05-13 09:43:15,994 [INFO] 
+2026-05-13 09:43:15,997 [INFO] got 1 active callback as follows:
+2026-05-13 09:43:15,997 [INFO] SummaryCallback()
+2026-05-13 09:43:15,998 [WARNING] The first epoch will be compiled for the graph, which may take a long time; You can come back later :).
+2026-05-13 09:45:41,384 [INFO] Epoch 1/100, Step 100/147, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.07959183305501938
+2026-05-13 09:45:41,388 [INFO] Epoch 1/100, Step 100/147, step time: 1453.90 ms
+2026-05-13 09:46:49,380 [INFO] Saving model to /Users/miaofangze/code/yolo算子开发/mindyolo-train-master/runs_train/2026.05.13-09.43.14/weights/yolov5n_number-1_147.ckpt
+2026-05-13 09:46:49,381 [INFO] Epoch 1/100, epoch time: 3.56 min.

@@ -1,0 +1,20 @@
+2026-05-13 10:02:05,565 [INFO] 
+2026-05-13 10:02:05,565 [INFO] Please check the above information for the configurations
+2026-05-13 10:02:05,745 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 10:02:05,766 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 10:02:05,950 [INFO] number of network params, total: 8.116399M, trainable: 8.074076M
+2026-05-13 10:02:06,374 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 10:02:06,395 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 10:02:06,562 [INFO] number of network params, total: 8.116399M, trainable: 8.074076M
+2026-05-13 10:02:07,363 [INFO] ema_weight not exist, default pretrain weight is currently used.
+2026-05-13 10:02:07,398 [INFO] Dataset Cache file hash/version check success.
+2026-05-13 10:02:07,398 [INFO] Load dataset cache from [../dataset/number_fullscreen_dataset/train.cache.npy] success.
+2026-05-13 10:02:07,407 [INFO] Dataloader num parallel workers: [8]
+2026-05-13 10:02:07,422 [INFO] Dataset Cache file hash/version check success.
+2026-05-13 10:02:07,422 [INFO] Load dataset cache from [../dataset/number_fullscreen_dataset/train.cache.npy] success.
+2026-05-13 10:02:07,426 [INFO] Dataloader num parallel workers: [8]
+2026-05-13 10:02:07,439 [INFO] total batch size: 8, accumulate: 1, nbs: 64, weight_decay scaled to 6.25e-05
+2026-05-13 10:02:07,547 [INFO] 
+2026-05-13 10:02:07,550 [INFO] got 1 active callback as follows:
+2026-05-13 10:02:07,550 [INFO] SummaryCallback()
+2026-05-13 10:02:07,550 [WARNING] The first epoch will be compiled for the graph, which may take a long time; You can come back later :).

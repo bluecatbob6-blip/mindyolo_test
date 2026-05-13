@@ -7,7 +7,7 @@ from config import config
 from myutils import mylog
 from myutils import myminio
 from myutils import strconv
-from service import InferenceOptions, MindYOLOInference
+from service import BUNDLED_MINDYOLO_ROOT, InferenceOptions, inference
 
 
 def flag_parse(first: bool):
@@ -26,7 +26,7 @@ def flag_parse(first: bool):
     parser.add_argument("--model-scale", dest="model_scale", default="s")
     parser.add_argument("--backend", dest="backend", default="ckpt", choices=["ckpt", "mindir"])
     parser.add_argument("--config", dest="config_path", default="")
-    parser.add_argument("--mindyolo-root", dest="mindyolo_root", default="../mindyolo-master")
+    parser.add_argument("--mindyolo-root", dest="mindyolo_root", default=BUNDLED_MINDYOLO_ROOT)
     parser.add_argument("--device-target", dest="device_target", default="Ascend")
     parser.add_argument("--img-size", dest="img_size", type=int, default=640)
     parser.add_argument("--conf-thres", dest="conf_thres", type=float, default=0.25)
@@ -105,7 +105,7 @@ def data_inference(model_path: str, data_path: str, result_minio_path: str, outp
         model_scale=config.global_config.model_scale,
         backend=config.global_config.backend,
         model_path=model_path,
-        image_path=data_path,
+        image_path="",
         config=config.global_config.config_path,
         device_target=config.global_config.device_target,
         img_size=config.global_config.img_size,
@@ -115,7 +115,7 @@ def data_inference(model_path: str, data_path: str, result_minio_path: str, outp
         extra_args=None,
     )
     logging.info(f"准备推理位于目录：{data_path} 中的数据")
-    result_path = MindYOLOInference(options).run()
+    result_path = inference(model_path, options).run(data_path)
     logging.info("预测完毕")
     logging.info(f"预测结果保存在：{result_path}")
 

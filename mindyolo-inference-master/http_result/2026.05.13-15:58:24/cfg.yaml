@@ -1,0 +1,385 @@
+task: detect
+device_target: CPU
+ms_mode: 0
+ms_amp_level: O3
+ms_enable_graph_kernel: false
+precision_mode: null
+weight: "/Users/miaofangze/code/yolo\u7B97\u5B50\u5F00\u53D1/mindyolo-inference-master/models/yolov5s_300e_mAP376-860bcf3b.ckpt"
+img_size: 640
+single_cls: false
+exec_nms: true
+nms_time_limit: 60.0
+conf_thres: 0.25
+iou_thres: 0.65
+conf_free: false
+seed: 2
+log_level: INFO
+save_dir: "/Users/miaofangze/code/yolo\u7B97\u5B50\u5F00\u53D1/mindyolo-inference-master/http_result/2026.05.13-15:58:24"
+image_path: "/Users/miaofangze/code/yolo\u7B97\u5B50\u5F00\u53D1/mindyolo-inference-master/data/tmp8u0nwx5o.jpg"
+save_result: true
+data: !!python/object/new:mindyolo.utils.config.Config
+  state:
+    dataset_name: coco
+    train_set: ./coco/train2017.txt
+    val_set: ./coco/val2017.txt
+    test_set: ./coco/test-dev2017.txt
+    nc: 80
+    names: &id001
+    - person
+    - bicycle
+    - car
+    - motorcycle
+    - airplane
+    - bus
+    - train
+    - truck
+    - boat
+    - traffic light
+    - fire hydrant
+    - stop sign
+    - parking meter
+    - bench
+    - bird
+    - cat
+    - dog
+    - horse
+    - sheep
+    - cow
+    - elephant
+    - bear
+    - zebra
+    - giraffe
+    - backpack
+    - umbrella
+    - handbag
+    - tie
+    - suitcase
+    - frisbee
+    - skis
+    - snowboard
+    - sports ball
+    - kite
+    - baseball bat
+    - baseball glove
+    - skateboard
+    - surfboard
+    - tennis racket
+    - bottle
+    - wine glass
+    - cup
+    - fork
+    - knife
+    - spoon
+    - bowl
+    - banana
+    - apple
+    - sandwich
+    - orange
+    - broccoli
+    - carrot
+    - hot dog
+    - pizza
+    - donut
+    - cake
+    - chair
+    - couch
+    - potted plant
+    - bed
+    - dining table
+    - toilet
+    - tv
+    - laptop
+    - mouse
+    - remote
+    - keyboard
+    - cell phone
+    - microwave
+    - oven
+    - toaster
+    - sink
+    - refrigerator
+    - book
+    - clock
+    - vase
+    - scissors
+    - teddy bear
+    - hair drier
+    - toothbrush
+    train_transforms: &id002
+    - func_name: mosaic
+      prob: 1.0
+    - func_name: resample_segments
+    - func_name: random_perspective
+      prob: 1.0
+      degrees: 0.0
+      translate: 0.1
+      scale: 0.5
+      shear: 0.0
+    - func_name: albumentations
+    - func_name: hsv_augment
+      prob: 1.0
+      hgain: 0.015
+      sgain: 0.7
+      vgain: 0.4
+    - func_name: fliplr
+      prob: 0.5
+    - func_name: label_norm
+      xyxy2xywh_: true
+    - func_name: label_pad
+      padding_size: 160
+      padding_value: -1
+    - func_name: image_norm
+      scale: 255.0
+    - func_name: image_transpose
+      bgr2rgb: true
+      hwc2chw: true
+    test_transforms: &id003
+    - func_name: letterbox
+      scaleup: false
+      only_image: true
+    - func_name: image_norm
+      scale: 255.0
+    - func_name: image_transpose
+      bgr2rgb: true
+      hwc2chw: true
+    num_parallel_workers: 8
+  dictitems:
+    dataset_name: coco
+    train_set: ./coco/train2017.txt
+    val_set: ./coco/val2017.txt
+    test_set: ./coco/test-dev2017.txt
+    nc: 80
+    names: *id001
+    train_transforms: *id002
+    test_transforms: *id003
+    num_parallel_workers: 8
+optimizer: !!python/object/new:mindyolo.utils.config.Config
+  state:
+    optimizer: momentum
+    lr_init: 0.01
+    momentum: 0.937
+    nesterov: true
+    loss_scale: 1.0
+    warmup_epochs: 3
+    warmup_momentum: 0.8
+    warmup_bias_lr: 0.1
+    min_warmup_step: 100
+    group_param: yolov5
+    gp_weight_decay: 0.0005
+    start_factor: 1.0
+    end_factor: 0.01
+  dictitems:
+    optimizer: momentum
+    lr_init: 0.01
+    momentum: 0.937
+    nesterov: true
+    loss_scale: 1.0
+    warmup_epochs: 3
+    warmup_momentum: 0.8
+    warmup_bias_lr: 0.1
+    min_warmup_step: 100
+    group_param: yolov5
+    gp_weight_decay: 0.0005
+    start_factor: 1.0
+    end_factor: 0.01
+loss: !!python/object/new:mindyolo.utils.config.Config
+  state:
+    name: YOLOv5Loss
+    box: 0.05
+    cls: 0.5
+    cls_pw: 1.0
+    obj: 1.0
+    obj_pw: 1.0
+    anchor_t: 4.0
+    fl_gamma: 0.0
+    label_smoothing: 0.0
+  dictitems:
+    name: YOLOv5Loss
+    box: 0.05
+    cls: 0.5
+    cls_pw: 1.0
+    obj: 1.0
+    obj_pw: 1.0
+    anchor_t: 4.0
+    fl_gamma: 0.0
+    label_smoothing: 0.0
+per_batch_size: 32
+sync_bn: false
+keep_loss_fp32: true
+network: !!python/object/new:mindyolo.utils.config.Config
+  state:
+    model_name: yolov5
+    depth_multiple: 0.33
+    width_multiple: 0.5
+    stride: &id004
+    - 8
+    - 16
+    - 32
+    anchors: &id005
+    - - 10
+      - 13
+      - 16
+      - 30
+      - 33
+      - 23
+    - - 30
+      - 61
+      - 62
+      - 45
+      - 59
+      - 119
+    - - 116
+      - 90
+      - 156
+      - 198
+      - 373
+      - 326
+    backbone: &id006
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 64
+        - 6
+        - 2
+        - 2
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 128
+        - 3
+        - 2
+    - - -1
+      - 3
+      - C3
+      - - 128
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 256
+        - 3
+        - 2
+    - - -1
+      - 6
+      - C3
+      - - 256
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 512
+        - 3
+        - 2
+    - - -1
+      - 9
+      - C3
+      - - 512
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 1024
+        - 3
+        - 2
+    - - -1
+      - 3
+      - C3
+      - - 1024
+    - - -1
+      - 1
+      - SPPF
+      - - 1024
+        - 5
+    head: &id007
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 512
+        - 1
+        - 1
+    - - -1
+      - 1
+      - Upsample
+      - - None
+        - 2
+        - nearest
+    - - - -1
+        - 6
+      - 1
+      - Concat
+      - - 1
+    - - -1
+      - 3
+      - C3
+      - - 512
+        - false
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 256
+        - 1
+        - 1
+    - - -1
+      - 1
+      - Upsample
+      - - None
+        - 2
+        - nearest
+    - - - -1
+        - 4
+      - 1
+      - Concat
+      - - 1
+    - - -1
+      - 3
+      - C3
+      - - 256
+        - false
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 256
+        - 3
+        - 2
+    - - - -1
+        - 14
+      - 1
+      - Concat
+      - - 1
+    - - -1
+      - 3
+      - C3
+      - - 512
+        - false
+    - - -1
+      - 1
+      - ConvNormAct
+      - - 512
+        - 3
+        - 2
+    - - - -1
+        - 10
+      - 1
+      - Concat
+      - - 1
+    - - -1
+      - 3
+      - C3
+      - - 1024
+        - false
+    - - - 17
+        - 20
+        - 23
+      - 1
+      - YOLOv5Head
+      - - nc
+        - anchors
+        - stride
+  dictitems:
+    model_name: yolov5
+    depth_multiple: 0.33
+    width_multiple: 0.5
+    stride: *id004
+    anchors: *id005
+    backbone: *id006
+    head: *id007
+config: "/Users/miaofangze/code/yolo\u7B97\u5B50\u5F00\u53D1/mindyolo-inference-master/service/mindyolo/configs/yolov5/yolov5s.yaml"
+rank: 0
+rank_size: 1

@@ -7,6 +7,10 @@ per_batch_size: 1  # 32 * 8 = 256
 img_size: 640
 sync_bn: False
 
+# BASE 中 hyp 会覆盖为 8，此处强制单机 worker 数
+data:
+  num_parallel_workers: 1
+
 # backbone/head calculate using fp16, loss fp32
 ms_amp_level: O3
 keep_loss_fp32: True

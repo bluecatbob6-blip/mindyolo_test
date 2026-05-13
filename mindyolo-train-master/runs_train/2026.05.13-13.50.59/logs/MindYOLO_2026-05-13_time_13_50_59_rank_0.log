@@ -1,0 +1,39 @@
+2026-05-13 13:50:59,730 [INFO] 
+2026-05-13 13:50:59,731 [INFO] Please check the above information for the configurations
+2026-05-13 13:50:59,797 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 13:50:59,807 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 13:50:59,841 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-13 13:50:59,969 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 13:50:59,978 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 13:51:00,014 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-13 13:51:00,382 [INFO] ema_weight not exist, default pretrain weight is currently used.
+2026-05-13 13:51:00,400 [INFO] Dataset Cache file hash/version check success.
+2026-05-13 13:51:00,400 [INFO] Load dataset cache from [../dataset/number_fullscreen_dataset/train.cache.npy] success.
+2026-05-13 13:51:00,409 [INFO] Dataloader num parallel workers: [1]
+2026-05-13 13:51:00,420 [INFO] total batch size: 2, accumulate: 1, nbs: 64, weight_decay scaled to 1.5625e-05
+2026-05-13 13:51:00,476 [INFO] 
+2026-05-13 13:51:00,478 [WARNING] --early_stop_patience 已设置但 run_eval 为 False，早停不会生效；请开启 --run_eval True。
+2026-05-13 13:51:00,478 [INFO] got 1 active callback as follows:
+2026-05-13 13:51:00,478 [INFO] SummaryCallback()
+2026-05-13 13:51:00,478 [WARNING] The first epoch will be compiled for the graph, which may take a long time; You can come back later :).
+2026-05-13 13:52:04,571 [INFO] Epoch 1/10, Step 100/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.09490662068128586
+2026-05-13 13:52:04,574 [INFO] Epoch 1/10, Step 100/589, step time: 640.96 ms
+2026-05-13 13:53:02,432 [INFO] Epoch 1/10, Step 200/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.0898132398724556
+2026-05-13 13:53:02,433 [INFO] Epoch 1/10, Step 200/589, step time: 578.59 ms
+2026-05-13 13:54:01,613 [INFO] Epoch 1/10, Step 300/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.08471986651420593
+2026-05-13 13:54:01,616 [INFO] Epoch 1/10, Step 300/589, step time: 591.83 ms
+2026-05-13 13:55:03,444 [INFO] Epoch 1/10, Step 400/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.07962648570537567
+2026-05-13 13:55:03,445 [INFO] Epoch 1/10, Step 400/589, step time: 618.28 ms
+2026-05-13 13:56:11,217 [INFO] Epoch 1/10, Step 500/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.07453310489654541
+2026-05-13 13:56:11,220 [INFO] Epoch 1/10, Step 500/589, step time: 677.75 ms
+2026-05-13 13:57:13,871 [INFO] Epoch 1/10, epoch time: 6.22 min.
+2026-05-13 13:58:24,832 [INFO] Epoch 2/10, Step 100/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.06452059745788574
+2026-05-13 13:58:24,833 [INFO] Epoch 2/10, Step 100/589, step time: 709.61 ms
+2026-05-13 13:59:36,244 [INFO] Epoch 2/10, Step 200/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.059371188282966614
+2026-05-13 13:59:36,245 [INFO] Epoch 2/10, Step 200/589, step time: 714.12 ms
+2026-05-13 14:00:48,531 [INFO] Epoch 2/10, Step 300/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.054221782833337784
+2026-05-13 14:00:48,532 [INFO] Epoch 2/10, Step 300/589, step time: 722.87 ms
+2026-05-13 14:02:00,682 [INFO] Epoch 2/10, Step 400/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.049072377383708954
+2026-05-13 14:02:00,683 [INFO] Epoch 2/10, Step 400/589, step time: 721.51 ms
+2026-05-13 14:03:13,108 [INFO] Epoch 2/10, Step 500/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.043922971934080124
+2026-05-13 14:03:13,111 [INFO] Epoch 2/10, Step 500/589, step time: 724.28 ms

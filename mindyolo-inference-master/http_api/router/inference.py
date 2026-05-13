@@ -6,7 +6,7 @@ from config import config
 from http_api.model.response import response as myresponse
 import logging
 import json
-from service import InferenceOptions, MindYOLOInference
+from service import InferenceOptions, inference
 
 router = APIRouter(
     prefix="/api/v1"
@@ -57,7 +57,7 @@ async def ctrl_inference(upload_files: List[UploadFile] = None, structured_data:
             model_scale=config.global_config.model_scale,
             backend=config.global_config.backend,
             model_path=config.global_config.model_path,
-            image_path=data_source,
+            image_path="",
             config=config.global_config.config_path,
             device_target=config.global_config.device_target,
             img_size=config.global_config.img_size,
@@ -65,7 +65,7 @@ async def ctrl_inference(upload_files: List[UploadFile] = None, structured_data:
             iou_thres=config.global_config.iou_thres,
             output_dir="./http_result",
         )
-        result = MindYOLOInference(options).run()
+        result = inference(config.global_config.model_path, options).run(data_source)
         if upload_files is not None:
             return FileResponse(result[0])
     except Exception as e:

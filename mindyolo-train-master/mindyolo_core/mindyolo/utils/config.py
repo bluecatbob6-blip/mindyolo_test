@@ -9,7 +9,7 @@ try:
 except AttributeError:
     collectionsAbc = collections
 
-__all__ = ["parse_args"]
+__all__ = ["parse_args", "merge_dataset_yaml_into_args"]
 
 
 def parse_args(parser):
@@ -102,6 +102,98 @@ def _merge_config(config, base):
         else:
             new[k] = config[k]
     return new
+
+
+def _yolov5_style_to_mindyolo_data(doc: dict, yaml_dir: str) -> dict:
+    """Ultralytics data.yaml（path/train/val/names）转为 MindYOLO args.data 常用字段。
+    path / train / val 相对路径均相对于 data yaml 文件所在目录解析（与 YOLOv5 一致）。"""
+    if "train" not in doc:
+        return {}
+
+    root_raw = str(doc.get("path", "") or ".").strip()
+    if root_raw and root_raw != ".":
+        root_abs = os.path.normpath(os.path.join(yaml_dir, root_raw))
+    else:
+        root_abs = yaml_dir
+
+    def joinp(p):
+        p = str(p).strip() if p is not None else ""
+        if not p:
+            return ""
+        if os.path.isabs(p):
+            return os.path.normpath(p)
+        return os.path.normpath(os.path.join(root_abs, p))
+
+    train_p = joinp(doc["train"])
+    val_raw = doc.get("val") or doc.get("train") or ""
+    val_p = joinp(val_raw) if str(val_raw).strip() else train_p
+    test_raw = doc.get("test") or ""
+    test_p = joinp(test_raw) if str(test_raw).strip() else ""
+
+    names = doc.get("names")
+    if isinstance(names, dict):
+
+        def sort_key(x):
+            try:
+                return int(x)
+            except (ValueError, TypeError):
+                return str(x)
+
+        keys = sorted(names.keys(), key=sort_key)
+        names_list = [names[k] for k in keys]
+    elif isinstance(names, (list, tuple)):
+        names_list = [str(x) for x in names]
+    else:
+        names_list = []
+
+    nc = doc.get("nc")
+    if nc is None:
+        nc = len(names_list)
+    nc = int(nc)
+
+    return {
+        "dataset_name": str(doc.get("dataset_name", "yolov5_data")),
+        "train_set": train_p,
+        "val_set": val_p if val_p else train_p,
+        "test_set": test_p if test_p else (val_p if val_p else train_p),
+        "nc": nc,
+        "names": names_list,
+    }
+
+
+def merge_dataset_yaml_into_args(args, filepath: str) -> None:
+    """
+    将独立数据 yaml 合并进 args.data（与 YOLOv5 的 --data 类似，对应平台 PLATFORM_DATA_YAML / --dataset-yaml）。
+    支持 MindYOLO 数据段（顶层 data: 或含 train_set 的平级字段）及 Ultralytics 风格（path/train/val/names）。
+    若外部文件中 train_transforms / test_transforms 为 []，则跳过，避免覆盖模型 yaml + hyp 中的增强配置。
+    """
+    filepath = os.path.abspath(os.path.expanduser(filepath.strip()))
+    if not os.path.isfile(filepath):
+        raise FileNotFoundError(f"dataset yaml not found: {filepath}")
+    yaml_dir = os.path.dirname(filepath)
+    with open(filepath, "r", encoding="utf-8") as fin:
+        doc = yaml.load(fin.read(), Loader=yaml.FullLoader)
+    if not doc:
+        return
+
+    if isinstance(doc, dict) and "data" in doc and isinstance(doc["data"], dict):
+        ext = dict(doc["data"])
+    elif isinstance(doc, dict) and "train_set" in doc:
+        ext = dict(doc)
+    elif isinstance(doc, dict) and "train" in doc and "path" in doc:
+        ext = _yolov5_style_to_mindyolo_data(doc, yaml_dir)
+        if not ext:
+            raise ValueError(f"Cannot parse as YOLOv5 data yaml: {filepath}")
+    else:
+        raise ValueError(
+            f"Unrecognized dataset yaml: {filepath}. "
+            "Expected MindYOLO (data.train_set / train_set) or YOLOv5 (path, train, val, names)."
+        )
+
+    for k, v in ext.items():
+        if k in ("train_transforms", "test_transforms") and isinstance(v, list) and len(v) == 0:
+            continue
+        args.data[k] = v
 
 
 class Config(dict):

@@ -1,0 +1,19 @@
+2026-05-13 10:11:32,208 [INFO] 
+2026-05-13 10:11:32,208 [INFO] Please check the above information for the configurations
+2026-05-13 10:11:32,274 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 10:11:32,284 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 10:11:32,319 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-13 10:11:32,447 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 10:11:32,456 [WARNING] Parse Model, args: nearest, keep str type
+2026-05-13 10:11:32,491 [INFO] number of network params, total: 1.78699M, trainable: 1.777447M
+2026-05-13 10:11:32,854 [INFO] ema_weight not exist, default pretrain weight is currently used.
+2026-05-13 10:11:32,867 [INFO] Dataset Cache file hash/version check success.
+2026-05-13 10:11:32,867 [INFO] Load dataset cache from [../dataset/number_fullscreen_dataset/train.cache.npy] success.
+2026-05-13 10:11:32,876 [INFO] Dataloader num parallel workers: [1]
+2026-05-13 10:11:32,897 [INFO] total batch size: 2, accumulate: 1, nbs: 64, weight_decay scaled to 1.5625e-05
+2026-05-13 10:11:32,936 [INFO] 
+2026-05-13 10:11:32,938 [INFO] got 1 active callback as follows:
+2026-05-13 10:11:32,938 [INFO] SummaryCallback()
+2026-05-13 10:11:32,938 [WARNING] The first epoch will be compiled for the graph, which may take a long time; You can come back later :).
+2026-05-13 10:12:36,885 [INFO] Epoch 1/100, Step 100/589, imgsize (640, 640), loss: nan, lbox: nan, lobj: nan, lcls: nan, cur_lr: 0.09490662068128586
+2026-05-13 10:12:36,886 [INFO] Epoch 1/100, Step 100/589, step time: 639.48 ms

@@ -419,7 +419,9 @@ class TaskAlignedAssigner(nn.Cell):
         align_metric *= mask_pos
         pos_align_metrics = align_metric.max(axis=-1, keepdims=True)  # (b, n_gt)
         pos_overlaps = (overlaps * mask_pos).max(axis=-1, keepdims=True)  # (b, n_gt)
-        norm_align_metric = (align_metric * pos_overlaps / (pos_align_metrics + self.eps)).max(-2).expand_dims(-1)
+        norm_align_metric = ops.expand_dims(
+            mnp.max(align_metric * pos_overlaps / (pos_align_metrics + self.eps), axis=-2), -1
+        )
         target_scores = target_scores * norm_align_metric
 
         return target_labels, target_bboxes, target_scores, ops.cast(fg_mask, ms.bool_), target_gt_idx

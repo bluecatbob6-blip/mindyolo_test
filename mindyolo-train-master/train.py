@@ -57,10 +57,21 @@ def build_args() -> argparse.Namespace:
     parser.add_argument("--img", dest="platform_img", type=int, default=None, help="图像边长，映射 --img_size")
     parser.add_argument("--epochs", type=int, default=300, help="训练轮数")
     parser.add_argument("--batch-size", dest="batch_size", type=int, default=None, help="单设备 batch，映射 --per_batch_size")
-    parser.add_argument("--optimizer", dest="optimizer", default="", help="优化器（MindYOLO 以 yaml 为准；可结合 extra_args 透传）")
-    parser.add_argument("--workers", type=int, default=None, help="数据加载并行度（尝试透传）")
-    parser.add_argument("--save-period", dest="save_period", type=int, default=None, help="保存周期（映射 keep_checkpoint 相关行为见 extra_args）")
-    parser.add_argument("--patience", type=int, default=None, help="早停耐心轮")
+    parser.add_argument("--optimizer", dest="optimizer", default="", help="覆盖 MindYOLO yaml 中 optimizer（透传 --platform-optimizer）")
+    parser.add_argument("--workers", type=int, default=None, help="数据加载并行度，透传为 MindYOLO --num_parallel_workers（覆盖 yaml）")
+    parser.add_argument(
+        "--save-period",
+        dest="save_period",
+        type=int,
+        default=None,
+        help="每 N epoch 保存 checkpoint（透传 --save_epoch_interval；1 表示每 epoch）",
+    )
+    parser.add_argument(
+        "--patience",
+        type=int,
+        default=None,
+        help="早停：验证 map50 连续无提升的 epoch 数（透传 --early_stop_patience；需 --run_eval True）",
+    )
 
     # 原有 MindYOLO 专用参数（脚本直接调试或与平台并存）
     parser.add_argument("--mindyolo_root", "--mindyolo-root", dest="mindyolo_root", default="./mindyolo_core", help="mindyolo 根目录")
@@ -160,8 +171,6 @@ def main() -> None:
     env = os.environ.copy()
     if args.dataset_dir.strip():
         env["DATASET_DIR"] = os.path.abspath(args.dataset_dir.strip())
-    if args.platform_data_yaml.strip():
-        env["PLATFORM_DATA_YAML"] = os.path.abspath(args.platform_data_yaml.strip())
 
     command = [
         sys.executable,
@@ -182,19 +191,25 @@ def main() -> None:
         save_dir,
     ]
 
+    if args.platform_data_yaml.strip():
+        p = os.path.abspath(args.platform_data_yaml.strip())
+        env["PLATFORM_DATA_YAML"] = p
+        command.extend(["--dataset-yaml", p])
+
     if args.weight:
         command.extend(["--weight", os.path.abspath(args.weight)])
 
     extra_args = list(args.extra_args) if args.extra_args else []
 
-    if args.workers is not None:
-        print("[MindYOLO] --workers 由 MindYOLO 配置 yaml 中 data.num_parallel_workers 控制，请在数据集 yaml 或 extra_args 中配置")
-
+    if (args.optimizer or "").strip():
+        command.extend(["--platform-optimizer", args.optimizer.strip()])
     if args.save_period is not None:
-        print("[MindYOLO] --save-period 请通过 extra_args 传入 MindYOLO 支持的 checkpoint 相关参数（如 --keep_checkpoint_max）")
-
+        command.extend(["--save_epoch_interval", str(max(1, int(args.save_period)))])
     if args.patience is not None:
-        print(f"[MindYOLO] --patience={args.patience} 需 MindYOLO 训练 yaml / callback 支持，当前未自动映射")
+        command.extend(["--early_stop_patience", str(max(0, int(args.patience)))])
+
+    if args.workers is not None:
+        command.extend(["--num_parallel_workers", str(args.workers)])
 
     if args.device_target.upper() == "CPU":
         if "--ms_mode" not in extra_args:

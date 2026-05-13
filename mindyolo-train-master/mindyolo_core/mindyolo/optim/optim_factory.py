@@ -54,6 +54,28 @@ def create_optimizer(
             use_nesterov=nesterov,
             loss_scale=loss_scale,
         )
+    elif optim == "adam":
+        optimizer = nn.Adam(
+            params=params,
+            learning_rate=lr,
+            weight_decay=weight_decay,
+            loss_scale=loss_scale,
+        )
+    elif optim in ("adamw", "adam_w"):
+        if hasattr(nn, "AdamWeightDecay"):
+            optimizer = nn.AdamWeightDecay(
+                params=params,
+                learning_rate=lr,
+                weight_decay=weight_decay,
+                loss_scale=loss_scale,
+            )
+        else:
+            optimizer = nn.Adam(
+                params=params,
+                learning_rate=lr,
+                weight_decay=weight_decay,
+                loss_scale=loss_scale,
+            )
     else:
         raise ValueError(f"Invalid optimizer: {optim}")
 

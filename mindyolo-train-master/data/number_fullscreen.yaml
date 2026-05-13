@@ -3,14 +3,15 @@
 #
 # 注意：
 # 1) train_set/val_set/test_set 需要是 txt 文件（每行一个图片路径）
-# 2) 可写绝对路径，也可写相对路径（相对当前运行目录）
+# 2) 可写绝对路径，也可写相对路径。经仓库根目录 train.py 启动时子进程 cwd 为 mindyolo_core/，故下面用相对该目录的路径，便于本机与 Docker 通用。
+# 3) hyp 在 __BASE__ 中若排在数据集之后，其中的 data.num_parallel_workers 会覆盖本项；单机调试请在模型 yaml 顶层再写 data.num_parallel_workers。
 
 data:
   dataset_name: number_fullscreen
 
-  train_set: /Users/miaofangze/code/yolo算子开发/mindyolo-train-master/dataset/number_fullscreen_dataset/train.txt
-  val_set: /Users/miaofangze/code/yolo算子开发/mindyolo-train-master/dataset/number_fullscreen_dataset/val.txt
-  test_set: /Users/miaofangze/code/yolo算子开发/mindyolo-train-master/dataset/number_fullscreen_dataset/test.txt
+  train_set: ../dataset/number_fullscreen_dataset/train.txt
+  val_set: ../dataset/number_fullscreen_dataset/val.txt
+  test_set: ../dataset/number_fullscreen_dataset/test.txt
 
   nc: 10
 

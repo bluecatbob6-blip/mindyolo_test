@@ -100,7 +100,9 @@ class Trainer:
         test_fn: types.FunctionType = None,
         ms_jit: bool = True,
         rank_size: int = 8,
-        profiler_step_num: int = 1
+        profiler_step_num: int = 1,
+        save_epoch_interval: int = 1,
+        early_stop_patience: int = 0,
     ):
         # Attr
         self.epochs = epochs
@@ -128,6 +130,11 @@ class Trainer:
         self.accumulate_grads = None
         self.accumulate = accumulate
         self.accumulate_grads_fn = self._get_accumulate_grads_fn()
+
+        save_epoch_interval = max(1, int(save_epoch_interval or 1))
+        early_stop_patience = max(0, int(early_stop_patience or 0))
+        es_best = -1.0
+        es_plateau = 0
 
         # Set Checkpoint Manager
         manager = CheckpointManager(ckpt_save_policy="latest_k")
@@ -182,27 +189,55 @@ class Trainer:
 
             # save checkpoint per epoch on main device
             if self.main_device and (i + 1) % self.steps_per_epoch == 0:
-                # Save Checkpoint
-                ms.save_checkpoint(
-                    self.optimizer, os.path.join(ckpt_save_dir, f"optim_{self.model_name}.ckpt"), async_save=True
+                do_save = (
+                    save_epoch_interval <= 1
+                    or cur_epoch % save_epoch_interval == 0
+                    or cur_epoch == epochs
                 )
-                save_path = os.path.join(ckpt_save_dir, f"{self.model_name}-{cur_epoch}_{self.steps_per_epoch}.ckpt")
-                manager.save_ckpoint(self.network, num_ckpt=keep_checkpoint_max, save_path=save_path)
-                if self.ema:
-                    save_path_ema = os.path.join(
-                        ckpt_save_dir, f"EMA_{self.model_name}-{cur_epoch}_{self.steps_per_epoch}.ckpt"
+                if do_save:
+                    ms.save_checkpoint(
+                        self.optimizer, os.path.join(ckpt_save_dir, f"optim_{self.model_name}.ckpt"), async_save=True
                     )
-                    manager_ema.save_ckpoint(self.ema.ema, num_ckpt=keep_checkpoint_max, save_path=save_path_ema)
-                logger.info(f"Saving model to {save_path}")
-
-                if enable_modelarts:
-                    sync_data(save_path, train_url + "/weights/" + save_path.split("/")[-1])
+                    save_path = os.path.join(ckpt_save_dir, f"{self.model_name}-{cur_epoch}_{self.steps_per_epoch}.ckpt")
+                    manager.save_ckpoint(self.network, num_ckpt=keep_checkpoint_max, save_path=save_path)
                     if self.ema:
-                        sync_data(save_path_ema, train_url + "/weights/" + save_path_ema.split("/")[-1])
+                        save_path_ema = os.path.join(
+                            ckpt_save_dir, f"EMA_{self.model_name}-{cur_epoch}_{self.steps_per_epoch}.ckpt"
+                        )
+                        manager_ema.save_ckpoint(self.ema.ema, num_ckpt=keep_checkpoint_max, save_path=save_path_ema)
+                    logger.info(f"Saving model to {save_path}")
+
+                    if enable_modelarts:
+                        sync_data(save_path, train_url + "/weights/" + save_path.split("/")[-1])
+                        if self.ema:
+                            sync_data(save_path_ema, train_url + "/weights/" + save_path_ema.split("/")[-1])
 
                 logger.info(f"Epoch {cur_epoch}/{epochs}, epoch time: {(time.time() - s_epoch_time) / 60:.2f} min.")
                 s_step_time = time.time()
                 s_epoch_time = time.time()
+
+                if early_stop_patience > 0 and test_fn is not None and run_eval:
+                    eval_net = self.ema.ema if self.ema else self.network
+                    _train_status = eval_net.training
+                    eval_net.set_train(False)
+                    metrics = test_fn(network=eval_net, cur_epoch=f"{cur_epoch:03d}")
+                    eval_net.set_train(_train_status)
+                    map50 = float(metrics[1]) if isinstance(metrics, (list, tuple)) and len(metrics) > 1 else float(
+                        metrics[0]
+                    )
+                    if map50 > es_best + 1e-6:
+                        es_best = map50
+                        es_plateau = 0
+                    else:
+                        es_plateau += 1
+                    logger.info(
+                        f"Early-stop monitor: map50={map50:.4f}, best={es_best:.4f}, plateau_epochs={es_plateau}"
+                    )
+                    if es_plateau >= early_stop_patience:
+                        logger.info(
+                            f"Early stopping triggered (patience={early_stop_patience}, metric=map50)."
+                        )
+                        break
             if self.profiler and self.profiler_step_num == cur_step:
                 break
             if cur_step == self.steps_per_epoch:
@@ -230,7 +265,9 @@ class Trainer:
         overflow_still_update: bool = False,
         ms_jit: bool = True,
         rank_size: int = 8,
-        profiler_step_num: int = 1
+        profiler_step_num: int = 1,
+        save_epoch_interval: int = 1,
+        early_stop_patience: int = 0,
     ):
         # Modify dataset columns name for data sink mode, because dataloader could not send string data to device.
         if task == "detect":
@@ -278,6 +315,11 @@ class Trainer:
         # Set Checkpoint Manager
         manager = CheckpointManager(ckpt_save_policy="latest_k")
         manager_ema = CheckpointManager(ckpt_save_policy="latest_k") if self.ema else None
+
+        save_epoch_interval = max(1, int(save_epoch_interval or 1))
+        early_stop_patience = max(0, int(early_stop_patience or 0))
+        es_best = -1.0
+        es_plateau = 0
 
         run_context = RunContext(
             epoch_num=epochs,
@@ -336,26 +378,54 @@ class Trainer:
 
             # save checkpoint per epoch on main device
             if self.main_device:
-                # Save Checkpoint
-                ms.save_checkpoint(
-                    self.optimizer, os.path.join(ckpt_save_dir, f"optim_{self.model_name}.ckpt"), async_save=True
+                do_save = (
+                    save_epoch_interval <= 1
+                    or cur_epoch % save_epoch_interval == 0
+                    or cur_epoch == epochs
                 )
-                save_path = os.path.join(ckpt_save_dir, f"{self.model_name}-{cur_epoch}_{self.steps_per_epoch}.ckpt")
-                manager.save_ckpoint(self.network, num_ckpt=keep_checkpoint_max, save_path=save_path)
-                if self.ema:
-                    save_path_ema = os.path.join(
-                        ckpt_save_dir, f"EMA_{self.model_name}-{cur_epoch}_{self.steps_per_epoch}.ckpt"
+                if do_save:
+                    ms.save_checkpoint(
+                        self.optimizer, os.path.join(ckpt_save_dir, f"optim_{self.model_name}.ckpt"), async_save=True
                     )
-                    manager_ema.save_ckpoint(self.ema.ema, num_ckpt=keep_checkpoint_max, save_path=save_path_ema)
-                logger.info(f"Saving model to {save_path}")
-
-                if enable_modelarts:
-                    sync_data(save_path, train_url + "/weights/" + save_path.split("/")[-1])
+                    save_path = os.path.join(ckpt_save_dir, f"{self.model_name}-{cur_epoch}_{self.steps_per_epoch}.ckpt")
+                    manager.save_ckpoint(self.network, num_ckpt=keep_checkpoint_max, save_path=save_path)
                     if self.ema:
-                        sync_data(save_path_ema, train_url + "/weights/" + save_path_ema.split("/")[-1])
+                        save_path_ema = os.path.join(
+                            ckpt_save_dir, f"EMA_{self.model_name}-{cur_epoch}_{self.steps_per_epoch}.ckpt"
+                        )
+                        manager_ema.save_ckpoint(self.ema.ema, num_ckpt=keep_checkpoint_max, save_path=save_path_ema)
+                    logger.info(f"Saving model to {save_path}")
+
+                    if enable_modelarts:
+                        sync_data(save_path, train_url + "/weights/" + save_path.split("/")[-1])
+                        if self.ema:
+                            sync_data(save_path_ema, train_url + "/weights/" + save_path_ema.split("/")[-1])
 
                 logger.info(f"Epoch {cur_epoch}/{epochs}, epoch time: {(time.time() - s_epoch_time) / 60:.2f} min.")
                 s_epoch_time = time.time()
+
+                if early_stop_patience > 0 and test_fn is not None and run_eval:
+                    eval_net = self.ema.ema if self.ema else self.network
+                    _train_status = eval_net.training
+                    eval_net.set_train(False)
+                    metrics = test_fn(network=eval_net, cur_epoch=f"{cur_epoch:03d}")
+                    eval_net.set_train(_train_status)
+                    map50 = float(metrics[1]) if isinstance(metrics, (list, tuple)) and len(metrics) > 1 else float(
+                        metrics[0]
+                    )
+                    if map50 > es_best + 1e-6:
+                        es_best = map50
+                        es_plateau = 0
+                    else:
+                        es_plateau += 1
+                    logger.info(
+                        f"Early-stop monitor: map50={map50:.4f}, best={es_best:.4f}, plateau_epochs={es_plateau}"
+                    )
+                    if es_plateau >= early_stop_patience:
+                        logger.info(
+                            f"Early stopping triggered (patience={early_stop_patience}, metric=map50)."
+                        )
+                        break
 
             if self.profiler and math.ceil(self.profiler_step_num/self.steps_per_epoch) == cur_epoch:
                 break

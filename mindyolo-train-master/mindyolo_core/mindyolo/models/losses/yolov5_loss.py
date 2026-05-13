@@ -71,7 +71,7 @@ class YOLOv5Loss(nn.Cell):
         return res
 
     def construct(self, p, targets, imgs):  # predictions, targets
-        lcls, lbox, lobj = get_tensor(0.0), get_tensor(0.0), get_tensor(0.0)
+        lcls, lbox, lobj = Tensor(0.0, ms.float32), Tensor(0.0, ms.float32), Tensor(0.0, ms.float32)
 
         tcls, tbox, indices, anchors, tmasks = self.build_targets(
             p, targets
@@ -151,7 +151,7 @@ class YOLOv5Loss(nn.Cell):
 
         for i in range(self.nl):
             anchors, shape = self.anchors[i], p[i].shape
-            gain[2:6] = get_tensor(shape, targets.dtype)[[3, 2, 3, 2]]  # xyxy gain
+            gain[2:6] = Tensor((shape[3], shape[2], shape[3], shape[2]), targets.dtype)  # xyxy gain
 
             # Match targets to anchors
             t = targets * gain  # shape(na,nt,7) # xywhn -> xywh
@@ -226,6 +226,3 @@ class YOLOv5Loss(nn.Cell):
         )  # class, box, (image, anchor, gridj, gridi), anchors, mask
 
 
-@ops.constexpr
-def get_tensor(x, dtype=ms.float32):
-    return Tensor(x, dtype)

@@ -1,5 +1,5 @@
 __BASE__: [
-  '../coco.yaml',
+  '../../../data/number_fullscreen.yaml',
   './hyp.scratch.low.yaml',
 ]
 
@@ -14,6 +14,10 @@ ms_loss_scaler_value: 65536.0
 clip_grad: True
 anchor_base: False
 opencv_threads_num: 0  # opencv: disable threading optimizations
+
+# BASE 中 hyp 会覆盖为 8，此处强制单机 worker 数
+data:
+  num_parallel_workers: 1
 
 network:
   model_name: yolov10

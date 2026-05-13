@@ -23,6 +23,12 @@
         "run": {
             "command": ["python3"],
             "required_args": ["http_main.py"]
+        },
+        "minio_authorization": {
+            "endpoint_flag": "--endpoint",
+            "access_key_flag": "--access-key",
+            "secret_key_flag": "--secret-key",
+            "secure_flag": "--secure"
         }
     },
     "batch_server": {
@@ -30,11 +36,5 @@
             "command": ["python3"],
             "required_args": ["batch_main.py"]
         }
-    },
-    "minio_authorization": {
-        "endpoint_flag": "--endpoint",
-        "access_key_flag": "--access-key",
-        "secret_key_flag": "--secret-key",
-        "secure_flag": "--secure"
     }
 }
